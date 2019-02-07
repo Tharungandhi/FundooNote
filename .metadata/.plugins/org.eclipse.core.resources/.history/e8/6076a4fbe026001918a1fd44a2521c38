@@ -1,0 +1,10 @@
+package com.bridgelabz.spring.util;
+
+public interface JWTGenerateToken {
+
+	   String generateToken(String id);
+	   
+	    int verifyToken(String token);
+
+	
+}

@@ -1,0 +1,77 @@
+package com.bridgelabz.spring.service;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bridgelabz.spring.dao.UserDao;
+import com.bridgelabz.spring.model.UserDetails;
+import com.bridgelabz.spring.util.EmailUtil;
+import com.bridgelabz.spring.util.GenerateTokenImlp;
+
+@Service
+public class UserServiceImlp implements UserService  {
+
+	@Autowired
+	private EmailUtil email;
+	
+	@Autowired
+	private UserDao userDao;
+
+	@Autowired
+	private GenerateTokenImlp generateToken;
+	@Transactional
+	public boolean register(UserDetails user, HttpServletRequest request) {
+		int id = userDao.register(user);
+		if (id > 0) {
+			String token = generateToken.generateToken(String.valueOf(id));
+			System.out.println(token);
+			email.sendEmail(, subject, body);
+			return true;
+		}
+		return false;
+}
+
+	
+	@Transactional
+	public UserDetails login(String emailId, HttpServletRequest request) {
+		return userDao.login(emailId);
+		
+	}
+	
+	@Transactional
+	public UserDetails update(int id,UserDetails user,HttpServletRequest request)
+	{
+		UserDetails user12=userDao.getUserByID(id);
+		if(user12!=null) {
+			  user12.setName(user.getName());
+			  user12.setEmailId(user.getEmailId());
+			  user12.setPassword(user.getPassword());
+	           user12.setMobileNumber(user.getMobileNumber());
+	          userDao.update(id, user12);
+	}
+		return user12;}
+
+	@Transactional
+	public UserDetails delete(int id,HttpServletRequest request) {
+		String emailId = null;
+		UserDetails user12=userDao.getUserByID(id);
+		userDao.delete(id);
+		return user12;
+	}
+
+
+
+
+	
+	
+	
+	
+
+	
+
+	
+
+	}
+

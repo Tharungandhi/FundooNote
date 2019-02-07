@@ -1,0 +1,18 @@
+package com.bridgelabz.spring.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.bridgelabz.spring.model.UserDetails;
+
+public interface UserService {
+	
+
+	boolean register(UserDetails user, HttpServletRequest request);
+		
+	boolean login(UserDetails user, HttpServletRequest request);
+
+	void update(UserDetails user, HttpServletRequest request);
+
+	UserDetails getUserByEmail(String emailId, HttpServletRequest request);
+	}
+

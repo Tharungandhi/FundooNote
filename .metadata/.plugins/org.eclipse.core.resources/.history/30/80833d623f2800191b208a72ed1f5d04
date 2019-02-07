@@ -1,0 +1,5 @@
+package com.bridgelabz.spring.service;
+
+public interface NoteService {
+
+}

@@ -1,0 +1,130 @@
+package com.bridgelabz.spring.dao;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.bridgelabz.spring.model.UserDetails;
+
+@Repository
+	public class UserDaoImpl implements UserDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public int register(UserDetails user) {
+		int userId = 0;
+		Session session = sessionFactory.getCurrentSession();
+		userId = (Integer) session.save(user);
+		return userId;
+	}
+
+	public UserDetails login(UserDetails user) {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlQuery = "from UserDetails where emailId = :emailId and password =:password";
+		Query query = session.createQuery(hqlQuery);
+		query.setParameter("emailId", user.getEmailId());
+		query.setParameter("password", user.getPassword());
+		UserDetails existingUser = (UserDetails) query.uniqueResult();
+		return existingUser;
+	}
+
+	   public UserDetails getUserByEmail(String emailId)
+	    {
+	        Session session = sessionFactory.openSession();
+
+
+	        Transaction tx = session.beginTransaction();
+	        Query query = session.createQuery("from UserDetails");
+	        List<UserDetails> empList = query.list();
+	        for(UserDetails emp : empList){
+	            System.out.println("List of users::"+emp.getId()+","+emp.getName()+","+emp.getEmailId()+","+emp.getMobileNumber());
+	        }
+
+
+	        query = session.createQuery("from UserDetails where emailId= :emailId");
+	        query.setString("emailId", emailId);
+	        UserDetails emp = (UserDetails) query.uniqueResult();
+	        System.out.println("User detail is="+emp.getName()+","+emp.getEmailId()+","+emp.getMobileNumber());
+	        session.close();
+	        return emp;
+	    }
+	   
+	   public UserDetails update(String emailId,UserDetails user)
+	    {
+	     Session session=sessionFactory.openSession();
+	     Transaction tx=session.beginTransaction();
+	     session.update(user);
+	     tx.commit();
+	     session.close();
+	     return null;
+	    }
+
+
+
+	public List<UserDetails> getUsersList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public UserDetails delete(String emailId,UserDetails user) {
+		Session session=sessionFactory.openSession();
+		Transaction tran=session.beginTransaction();
+		session.delete(user);
+		tran.commit();
+		session.close();
+		return null;
+		
+	}
+
+	public void updateUser(UserDetails user) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	
+	
+	
+	
+//	public boolean updateUser(UserDetails user) {
+//		Session session = this.sessionFactory.getCurrentSession();
+//		session.update(user);
+//		logger.info("Person updated successfully, Person Details="+user);
+//	}
+//
+//	
+//	public List<UserDetails> getUsersList() {
+//		Session session = this.sessionFactory.getCurrentSession();
+//		List<UserDetails> personsList = session.createQuery("from Person").list();
+//		for(UserDetails p : personsList){
+//			logger.info("Person List::"+p);
+//		}
+//		return personsList;
+//		return null;
+//	}
+//
+//	public void deleteUser(String id) {
+//		Session session = this.sessionFactory.getCurrentSession();
+//		UserDetails user = (UserDetails) session.load(UserDetails.class, new Integer(id));
+//		if(null != user){
+//			session.delete(user);
+//		}
+//		logger.info("Person deleted successfully, person details="+user);
+//	}
+//}
+//public UserDetails getPersonById(int id) {
+//	Session session = this.sessionFactory.getCurrentSession();		
+//	UserDetails p = (UserDetails) session.load(UserDetails.class, new Integer(id));
+//	logger.info("Person loaded successfully, Person details="+p);
+//	return p;
+//	}
+
+	
+		
+	}

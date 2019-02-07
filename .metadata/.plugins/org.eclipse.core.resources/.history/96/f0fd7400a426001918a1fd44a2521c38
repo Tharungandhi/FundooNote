@@ -1,0 +1,24 @@
+package com.bridgelabz.spring.dao;
+
+import java.util.List;
+
+import com.bridgelabz.spring.model.UserDetails;
+
+public interface UserDao {
+
+	Object user = null;
+
+	int register(UserDetails user);
+	
+	UserDetails login(String emailId);
+	
+	void update(int id, UserDetails user12);
+	
+	void delete(int id);
+
+
+
+
+
+}
+

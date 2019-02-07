@@ -1,0 +1,12 @@
+package com.bridgelabz.spring.dao;
+
+import com.bridgelabz.spring.model.Note;
+
+public interface NoteDao {
+	
+	int createNote(Note user);
+	
+	Note getUserByID(int id);
+	
+	Note update(int id, Note user12);
+}

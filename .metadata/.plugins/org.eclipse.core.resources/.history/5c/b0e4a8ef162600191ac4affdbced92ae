@@ -1,0 +1,61 @@
+package com.bridgelabz.spring.service;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bridgelabz.spring.dao.UserDao;
+import com.bridgelabz.spring.model.UserDetails;
+
+@Service
+public class UserServiceImlp implements UserService  {
+
+	@Autowired
+	private UserDao userDao;
+
+	@Transactional
+	public boolean register(UserDetails user, HttpServletRequest request) {
+		int id = userDao.register(user);
+		if (id > 0) {
+			return true;
+		}
+		return false;
+}
+
+	public boolean login(UserDetails user, HttpServletRequest request) {
+		UserDetails id=userDao.login(user);
+		if(id.equals(user.getId())) {
+			return true;
+		}
+		return false;
+	}
+	@Transactional
+	public UserDetails getUserByEmail(String emailId, HttpServletRequest request) {
+		return userDao.getUserByEmail(emailId);
+		
+	}
+	
+	public UserDetails update(String emailId,UserDetails user,HttpServletRequest request)
+	{
+	    UserDetails user12=userDao.getUserByEmail(emailId);
+	    user12.setMobileNumber(user.getMobileNumber());
+	    user12.setName(user.getName());
+	    user12.setPassword(user.getPassword());
+	    userDao.update(emailId, user12);
+	    return user;
+	}
+	
+	
+	
+
+	public void update(UserDetails user, HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	
+
+	}
+

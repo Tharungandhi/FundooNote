@@ -1,0 +1,9 @@
+package com.bridgelabz.spring.dao;
+
+import com.bridgelabz.spring.model.Note;
+import com.bridgelabz.spring.model.UserDetails;
+
+public interface NoteDao {
+	
+	int registerNote(Note user);
+}

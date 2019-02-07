@@ -1,0 +1,63 @@
+package com.bridgelabz.spring.dao;
+
+import java.util.List;
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
+import com.bridgelabz.spring.model.UserDetails;
+
+@Repository
+	public class UserDaoImpl implements UserDao {
+
+	@Autowired
+	private SessionFactory sessionFactory;
+
+	public int register(UserDetails user) {
+		int userId = 0;
+		Session session = sessionFactory.getCurrentSession();
+		userId = (Integer) session.save(user);
+		return userId;
+	}
+
+	public UserDetails login(UserDetails user) {
+		Session session = sessionFactory.getCurrentSession();
+		String hqlQuery = "from UserDetails where emailId = :emailId and password =:password";
+		Query query = session.createQuery(hqlQuery);
+		query.setParameter("emailId", user.getEmailId());
+		query.setParameter("password", user.getPassword());
+		UserDetails existingUser = (UserDetails) query.uniqueResult();
+		return existingUser;
+	}
+//	public UserDetails updateUser(UserDetails user) {
+//		int userId = 0;
+//		Session session = this.sessionFactory.getCurrentSession();
+//		session.update(user);
+//		userId = (UserDetails) session.save(user);
+//		return userId;
+//		
+
+
+
+
+	
+	public List<UserDetails> getUsersList() {
+		
+		return null;
+	}
+
+	public void deleteUser(String id) {
+		
+}
+
+	public boolean updateUser(UserDetails user) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+		
+	}

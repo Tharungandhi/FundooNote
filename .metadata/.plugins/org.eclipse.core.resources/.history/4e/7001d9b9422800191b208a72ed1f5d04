@@ -1,0 +1,21 @@
+package com.bridgelabz.spring.dao;
+
+import org.hibernate.Session;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.hibernate.SessionFactory;
+import com.bridgelabz.spring.model.UserDetails;
+
+@Repository
+public class NoteDaoImpl implements NoteDao{
+
+	@Autowired
+	private SessionFactory sessionFactory;
+	
+	public int register(UserDetails user) {
+		int userId = 0;
+		Session session = sessionFactory.getCurrentSession();
+		userId = (Integer) session.save(user);
+		return userId;
+	}
+}

@@ -1,0 +1,20 @@
+package com.bridgelabz.spring.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.stereotype.Service;
+
+import com.bridgelabz.spring.model.UserDetails;
+
+@Service
+public class NoteServiceImpl implements NoteService {
+
+	public boolean register(UserDetails user, HttpServletRequest request) {
+		int id = noteDao.register(user);
+		if (id > 0) {
+			return true;
+		}
+		return false;
+	}
+
+}

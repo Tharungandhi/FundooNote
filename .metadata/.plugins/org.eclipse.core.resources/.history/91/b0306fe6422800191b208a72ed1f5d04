@@ -1,0 +1,28 @@
+package com.bridgelabz.spring.service;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bridgelabz.spring.dao.NoteDao;
+import com.bridgelabz.spring.model.UserDetails;
+
+@Service
+public class NoteServiceImpl implements NoteService {
+
+	
+	@Autowired
+	NoteDao noteDao;
+	
+	@Transactional
+	public boolean registerNote(UserDetails user, HttpServletRequest request) {
+		int id = noteDao.register(user);
+		if (id > 0) {
+			return true;
+		}
+		return false;
+	}
+
+}

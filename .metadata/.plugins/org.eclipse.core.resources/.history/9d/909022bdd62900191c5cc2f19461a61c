@@ -1,0 +1,72 @@
+package com.bridgelabz.spring.service;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.bridgelabz.spring.dao.NoteDao;
+import com.bridgelabz.spring.dao.UserDao;
+import com.bridgelabz.spring.model.Note;
+import com.bridgelabz.spring.model.UserDetails;
+
+@Service
+public class NoteServiceImpl implements NoteService {
+
+	
+	@Autowired
+	 private NoteDao noteDao;
+	
+	@Autowired
+	private UserDao userDao;
+	
+	@Transactional
+	public boolean createNote(int id,Note user, HttpServletRequest request) {
+		UserDetails user1= userDao.getUserByID(id);
+		if(user1!=null)
+		{
+			user.setId(id);
+		int id1 = noteDao.createNote(user);
+		if (id1> 0) {
+			return true;
+		}
+		}
+		return false;
+	}
+
+	
+	@Transactional
+	public Note updateNote(int id,Note user,HttpServletRequest request)
+	{
+		Note user12=noteDao.getNoteByID(id);
+		if(user12!=null) {
+			  user12.setTitle(user.getTitle());
+			  user12.setDiscription(user.getDiscription());
+	           noteDao.updateNote(id, user12);
+	}
+		return user12;}
+
+	
+	
+	@Transactional
+	public Note deleteNote(int id,HttpServletRequest request) {
+		Note user12=noteDao.getNoteByID(id);
+		noteDao.deleteNote(id);
+		return user12;
+	}
+
+	  @Transactional
+	    public List<Note> retrieve(HttpServletRequest request) {
+	        List<Note> listOfNote = noteDao.retrieve();
+	        if (!listOfNote.isEmpty()) {
+	            return listOfNote;
+	        }
+	        return null;
+	    }
+
+
+
+}
