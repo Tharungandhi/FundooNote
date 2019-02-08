@@ -10,13 +10,17 @@ public interface UserService {
 
 	boolean register(UserDetails user, HttpServletRequest request);
 		
-   UserDetails update(int id,UserDetails user,HttpServletRequest request);
+   UserDetails update(String token,UserDetails user,HttpServletRequest request);
 
-	UserDetails login(String emailId, String password, HttpServletRequest request,HttpServletResponse response);
+	UserDetails login(UserDetails user, HttpServletRequest request,HttpServletResponse response);
 	
-	UserDetails  delete(int id, HttpServletRequest request);
+	UserDetails  delete(String token, HttpServletRequest request);
 	
 	UserDetails activateUser(String token, HttpServletRequest request);
+	
+	boolean forgotPassword(String emailid,HttpServletRequest request);
+	
+	UserDetails resetPassword(UserDetails user,String token,HttpServletRequest request);
 	
 	}
 

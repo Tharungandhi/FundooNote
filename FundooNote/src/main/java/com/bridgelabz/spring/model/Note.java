@@ -64,6 +64,8 @@ public class Note implements Serializable {
 	        joinColumns = { @JoinColumn(name = "noteId") }, 
 	        inverseJoinColumns = { @JoinColumn(name = "labelId") }
 	    )
+	
+	
 	private List<Label> listOfLabels;
 	
 

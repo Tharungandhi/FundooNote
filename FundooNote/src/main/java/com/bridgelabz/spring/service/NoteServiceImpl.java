@@ -1,6 +1,7 @@
 package com.bridgelabz.spring.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -26,16 +27,17 @@ public class NoteServiceImpl implements NoteService {
 	private UserDao userDao;
 	
 	@Autowired
-	private GenerateTokenImlp tokenGenerator;
+	private GenerateTokenImlp generateToken;
 	
 	@Transactional
-	public boolean createNote(int id,Note note, HttpServletRequest request) {
+	public boolean createNote(String token,Note note, HttpServletRequest request) {
+		int id = generateToken.verifyToken(token);
 		UserDetails user=userDao.getUserByID(id);
 		if(user!=null)
 		{
 			note.setUserid(user);
-		int id1 = noteDao.createNote(note);
-		if (id1> 0) {
+		int notId = noteDao.createNote(note);
+		if (notId> 0) {
 			return true;
 		}
 		}
@@ -44,29 +46,38 @@ public class NoteServiceImpl implements NoteService {
 
 	
 	@Transactional
-	public Note updateNote(int id,Note user,HttpServletRequest request)
+	public Note updateNote(int id,String token,Note note,HttpServletRequest request)
 	{
-		Note user12=noteDao.getNoteByID(id);
-		if(user12!=null) {
-			  user12.setTitle(user.getTitle());
-			  user12.setDiscription(user.getDiscription());
-	           noteDao.updateNote(id, user12);
+		int userId = generateToken.verifyToken(token);
+		UserDetails user=userDao.getUserByID(userId);
+		if(user!=null) {
+			Note newNote=noteDao.getNoteByID(id);
+			newNote.setTitle(note.getTitle());
+			newNote.setDiscription(note.getDiscription());
+	           noteDao.updateNote(id, newNote);
+	           return newNote;
 	}
-		return user12;}
+		return null;
+		}
 
 	
 	
 	@Transactional
-	public Note deleteNote(int id,HttpServletRequest request) {
-		Note user12=noteDao.getNoteByID(id);
+	public Note deleteNote(int id,String token,HttpServletRequest request) {
+		int userId = generateToken.verifyToken(token);
+		UserDetails user=userDao.getUserByID(userId);
+		if(user!=null) {
+		Note newNote=noteDao.getNoteByID(id);
 		noteDao.deleteNote(id);
-		return user12;
+		return newNote;
 	}
+		return null;}
 
 	  @Transactional
-	    public List<Note> retrieve(int id,HttpServletRequest request) {
-		  UserDetails user=userDao.getUserByID(id);
-		  if(user!=null) {
+	    public List<Note> retrieveNote(String token,HttpServletRequest request) {
+		  int id = generateToken.verifyToken(token);
+		  UserDetails note=userDao.getUserByID(id);
+		  if(note!=null) {
 	        List<Note> listOfNote = noteDao.retrieve(id);
 	        if (!listOfNote.isEmpty()) {
 	            return listOfNote;
@@ -78,13 +89,14 @@ public class NoteServiceImpl implements NoteService {
 	  
 	  
 	  @Transactional
-	public boolean createLabel(int id, Label label, HttpServletRequest request) {
+	public boolean createLabel(String token, Label label, HttpServletRequest request) {
+		  int id = generateToken.verifyToken(token);
 		UserDetails user=userDao.getUserByID(id);
 		if(user!=null)
 		{
 			label.setUserid(user);
-		int id1 = noteDao.createLabel(label);
-		if (id1> 0) {
+		int newLabel = noteDao.createLabel(label);
+		if (newLabel> 0) {
 			return true;
 		}
 		}
@@ -92,28 +104,37 @@ public class NoteServiceImpl implements NoteService {
 	}
 
 	  @Transactional
-	public Label updateLabel(int id, Label label, HttpServletRequest request) {
-		Label label1=noteDao.getLabelByID(id);
-		if(label1!=null) { 
-			label1.setLabelName(label.getLabelName());
-	           noteDao.updateLabel(id, label1);
+	public Label updateLabel(int id,String token, Label label, HttpServletRequest request) {
+		  int userId = generateToken.verifyToken(token);
+		  UserDetails user=userDao.getUserByID(userId);
+		  if(user!=null) {
+		  Label newlabel=noteDao.getLabelByID(id);
+		if(newlabel!=null) { 
+			newlabel.setLabelName(label.getLabelName());
+	           noteDao.updateLabel(id, newlabel);
 	}
-		return label1;
-		
+		return newlabel;
+		  }
+		return null;
 	}
 
 	  @Transactional
-	public Label deleteLabel(int id, HttpServletRequest request) {
+	public Label deleteLabel(int id,String token, HttpServletRequest request) {
+		  int userId = generateToken.verifyToken(token);
+		  UserDetails user=userDao.getUserByID(userId);
+		  if(user!=null) {
 		Label label=noteDao.getLabelByID(id);
 		noteDao.deleteLabel(id);
 		return label;
 	}
+		return null;}
 
 	  @Transactional
-	public List<Label> retrieveLabel(int id, HttpServletRequest request) {
-		UserDetails user=userDao.getUserByID(id);
+	public List<Label> retrieveLabel(String token, HttpServletRequest request) {
+		  int userId = generateToken.verifyToken(token);
+		UserDetails user=userDao.getUserByID(userId);
 		  if(user!=null) {
-	        List<Label> listOfLabel = noteDao.retrieveLabel(id);
+	        List<Label> listOfLabel = noteDao.retrieveLabel(userId);
 	        if (!listOfLabel.isEmpty()) {
 	            return listOfLabel;
 	        }
@@ -123,7 +144,7 @@ public class NoteServiceImpl implements NoteService {
 	}
 	  @Transactional
 	    public boolean mapNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
-	        int id = tokenGenerator.verifyToken(token);
+	        int id = generateToken.verifyToken(token);
 	        UserDetails user = userDao.getUserByID(id);
 	        if (user != null) {
 	            Note note = noteDao.getNoteByID(noteId);
@@ -139,5 +160,27 @@ public class NoteServiceImpl implements NoteService {
 	        return false;
 	    }
 
+
+
+	public boolean removeNoteLabel(String token, int noteId, int labelId, HttpServletRequest request) {
+        int id = generateToken.verifyToken(token);
+        UserDetails user = userDao.getUserByID(id);
+        if (user != null) {
+            Note note = noteDao.getNoteByID(noteId);
+            List<Label> listOfLabels = note.getListOfLabels();
+            if (!listOfLabels.isEmpty()) {
+                listOfLabels = listOfLabels.stream().filter(label -> label.getId() != labelId)
+                        .collect(Collectors.toList());
+                note.setListOfLabels(listOfLabels);
+                noteDao.updateNote(noteId, note);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+	
+	 
 
 }

@@ -19,9 +19,8 @@ public class NoteDaoImpl implements NoteDao {
 	private SessionFactory sessionFactory;
 
 	public int createNote(Note note) {
-		int userId = 0;
 		Session session = sessionFactory.getCurrentSession();
-		userId = (Integer) session.save(note);
+		int userId = (Integer) session.save(note);
 		session.close();
 		return userId;
 	}
@@ -66,6 +65,7 @@ public class NoteDaoImpl implements NoteDao {
 		Session session = sessionFactory.openSession();
 		Query hqlQuery = session.createQuery("from Note where userid=:userid");
 		hqlQuery.setInteger("userid", id);
+		@SuppressWarnings("unchecked")
 		List<Note> listOfNote = hqlQuery.list();
 		return listOfNote;
 	}
@@ -108,7 +108,6 @@ public class NoteDaoImpl implements NoteDao {
 			tx.commit();
 			session.close();
 		}
-		
 		return label;
 	}
 
@@ -116,6 +115,7 @@ public class NoteDaoImpl implements NoteDao {
 		Session session = sessionFactory.openSession();
 		Query hqlQuery = session.createQuery("from Label where userid=:userid");
 		hqlQuery.setInteger("userid", id);
+		@SuppressWarnings("unchecked")
 		List<Label> listOfLabel = hqlQuery.list();
 		session.close();
 		return listOfLabel;

@@ -45,6 +45,8 @@ public class UserDetails implements Serializable {
 	@JsonIgnore
 	private Set<Label> label;
 	
+	
+	
 	public Set<Label> getLabel() {
 		return label;
 	}

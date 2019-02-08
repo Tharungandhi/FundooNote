@@ -14,7 +14,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class GenerateTokenImlp implements GenerateJWT {
 
 	public String generateToken(String id) {
-		        return Jwts.builder().setId(id).claim("roles", "existingUser").setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretKey").compact();
+		        return Jwts.builder().setId(id).claim("roles", "existingUser").setIssuedAt(new Date())
+		        		.signWith(SignatureAlgorithm.HS256, "secretKey").compact();
 		    }
 
 
@@ -22,7 +23,7 @@ public class GenerateTokenImlp implements GenerateJWT {
 		Claims claims = Jwts.parser()        
                 .setSigningKey(DatatypeConverter.parseBase64Binary("secretKey"))
                 .parseClaimsJws(token).getBody();
-             System.out.println("ID: " + claims.getId());
+             System.out.println("Id: " + claims.getId());
              return Integer.parseInt(claims.getId());
 		
 	}

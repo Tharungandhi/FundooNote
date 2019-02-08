@@ -9,25 +9,26 @@ import com.bridgelabz.spring.model.Note;
 
 public interface NoteService {
 	
-	boolean createNote(int id,Note user, HttpServletRequest request);
+	boolean createNote(String token,Note user, HttpServletRequest request);
 	
-	Note updateNote(int id,Note user,HttpServletRequest request);
+	Note updateNote(int id,String token,Note user,HttpServletRequest request);
 	
-	Note  deleteNote(int id, HttpServletRequest request);
+	Note  deleteNote(int id,String token ,HttpServletRequest request);
 	
-   List<Note> retrieve(int id,HttpServletRequest request);
+   List<Note> retrieveNote(String token,HttpServletRequest request);
    
    
    
    
-	boolean createLabel(int id,Label label, HttpServletRequest request);
+   boolean createLabel(String token,Label label, HttpServletRequest request);
 	
-   Label updateLabel(int id,Label label,HttpServletRequest request);
+   Label updateLabel(int id,String token,Label label,HttpServletRequest request);
 	
-   Label  deleteLabel(int id, HttpServletRequest request);
+   Label  deleteLabel(int id,String token, HttpServletRequest request);
    
-   List<Label> retrieveLabel(int id,HttpServletRequest request);
+   List<Label> retrieveLabel(String token,HttpServletRequest request);
    
    boolean mapNoteLabel(String token, int noteId, int labelId, HttpServletRequest request);
 	
+   boolean removeNoteLabel(String token, int noteId, int labelId, HttpServletRequest request);
 }

@@ -41,9 +41,10 @@ import com.bridgelabz.spring.model.UserDetails;
 		        Session session = sessionFactory.openSession();
 		        Transaction tx = session.beginTransaction();
 		        Query query = session.createQuery("from UserDetails");
-		        List<UserDetails> empList = query.list();
-		        for(UserDetails emp : empList){
-		            System.out.println("List of users::"+emp.getId()+","+emp.getName()+","+emp.getEmailId()+","+emp.getMobileNumber());
+		        @SuppressWarnings("unchecked")
+				List<UserDetails> userList = query.list();
+		        for(UserDetails user : userList){
+		            System.out.println("List of users::"+user.getId()+","+user.getName()+","+user.getEmailId()+","+user.getMobileNumber());
 		        }
 		        query = session.createQuery("from UserDetails where emailId= :emailId");
 		        query.setString("emailId", emailId);
@@ -70,12 +71,12 @@ import com.bridgelabz.spring.model.UserDetails;
 	        Transaction tx = session.beginTransaction();
 	        Query  query = session.createQuery("from UserDetails where id= :id");
 	         query.setInteger("id", id);
-	        UserDetails emp = (UserDetails) query.uniqueResult();
-	        if(emp!=null) {
-	        System.out.println("User detail is="+ emp.getId()+emp.getName()+","+emp.getEmailId()+","+emp.getMobileNumber()+","+ emp.isActivationStatus());
+	        UserDetails user = (UserDetails) query.uniqueResult();
+	        if(user!=null) {
+	        System.out.println("User detail is="+ user.getId()+user.getName()+","+user.getEmailId()+","+user.getMobileNumber()+","+ user.isActivationStatus());
 	        }  tx.commit();
 	        session.close();
-			return emp;
+			return user;
 	}
 	
 	public List<UserDetails> getUsersList() {
