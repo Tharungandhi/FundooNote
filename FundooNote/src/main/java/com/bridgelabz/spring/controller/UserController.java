@@ -3,8 +3,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -12,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.bridgelabz.spring.model.UserDetails;
 import com.bridgelabz.spring.service.UserService;
@@ -22,6 +27,24 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	
+	
+	  UserDetails users = new UserDetails();
+
+	   @Autowired
+	   @Qualifier("UserValidation")
+	   private org.springframework.validation.Validator validator;
+
+	   @InitBinder
+	   private void initBinder(WebDataBinder binder) {
+	       binder.setValidator( validator);
+	   }
+
+	   @GetMapping("index")
+	   public ModelAndView register(UserDetails user) {
+	       return new ModelAndView("registeruser");
+	   }
+	
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public ResponseEntity<String> registerUser(@RequestBody UserDetails user, HttpServletRequest request) {
 			try {
@@ -113,5 +136,10 @@ public class UserController {
    }
    }
    
+   
+   
+ 
+
+
 }
 

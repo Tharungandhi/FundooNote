@@ -44,6 +44,7 @@
 		<property name="password" value="password" />
 	</bean>
 
+<bean id="UserValidation" class="com.bridgelabz.spring.util.UserValidation"/>
 	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="annotatedClasses">
@@ -51,6 +52,7 @@
 				<value>com.bridgelabz.spring.model.UserDetails</value>
 				<value>com.bridgelabz.spring.model.Note</value>
 				<value>com.bridgelabz.spring.model.Label</value>
+				<value>com.bridgelabz.spring.util.UserValidation</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
