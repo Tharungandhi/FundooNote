@@ -35,8 +35,10 @@ public class UserServiceImlp implements UserService {
 			String token = generateToken.generateToken(String.valueOf(id));
 			System.out.println(token);
 			user.setPassword(bcryptEncoder.encode(user.getPassword()));
-			String verificationLink = "http://localhost:8080/FundooNote/activationstatus/" + token;
-			emailutil.sendEmail("tharungandhi636@gmail.com", "Verification mail", verificationLink);
+			 StringBuffer requestUrl = request.getRequestURL();
+	            String activationUrl = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+	            activationUrl = activationUrl + "/activationstatus/" + token;
+	            emailutil.sendEmail("", "Activation Status Verification", activationUrl);
 			return true;
 		}
 		return false;
@@ -94,8 +96,11 @@ public class UserServiceImlp implements UserService {
 		UserDetails user = userDao.login(emailId);
 		if (user != null) {
 			String token = generateToken.generateToken(String.valueOf(user.getId()));
-			String forgotPasswordLink = "http://localhost:8080/FundooNote/resetpassword/" + token;
-			emailutil.sendEmail("tharungandhi636@gmail.com", "Reset Password Link", forgotPasswordLink);
+			 StringBuffer requestUrl = request.getRequestURL();
+	            String forgotPasswordLink = requestUrl.substring(0, requestUrl.lastIndexOf("/"));
+	            forgotPasswordLink = forgotPasswordLink + "/resetpassword/" + token;
+	            emailutil.sendEmail("", "Rest password verification", forgotPasswordLink);
+			
 		}
 		return false;
 
